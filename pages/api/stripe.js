@@ -3,6 +3,8 @@ import Stripe from 'stripe';
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
+    console.log(req.body.cartItems)
+
   if (req.method === 'POST') {
     try {
       const params = {
@@ -19,7 +21,7 @@ export default async function handler(req, res) {
 
           return {
             price_data: { 
-              currency: 'usd',
+              currency: 'brl',
               product_data: { 
                 name: item.name,
                 images: [newImage],
@@ -37,7 +39,6 @@ export default async function handler(req, res) {
         cancel_url: `${req.headers.origin}/canceled`,
       }
 
-      // Create Checkout Sessions from body params.
       const session = await stripe.checkout.sessions.create(params);
 
       res.status(200).json(session);
