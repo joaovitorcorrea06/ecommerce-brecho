@@ -15,7 +15,6 @@ const Cart = () => {
   const handleCheckout = async () => {
     const stripe = await getStripe();
 
-    // ERRO TA AQUI
     const response = await fetch('/api/stripe', {
       method: 'POST',
       headers: {
