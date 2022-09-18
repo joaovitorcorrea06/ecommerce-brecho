@@ -10,13 +10,12 @@ const Home = ({products, bannerData}) => {
     <HeroBanner heroBanner={bannerData.length && bannerData[0]}  />
 
     <div className="products-heading">
-      <h2>Seja bem vindo</h2>
-      <p> Veja meus produtos!</p>
+      <h2>Seja bem vindo!</h2>
+      <p> Veja as melhores roupas da internet s2</p>
     </div>
 
       <div className="products-container">
-        {products?.map(
-          (product)=> <Product key ={product._id} product={product}/>)}
+        {products?.map((product)=>product.status !== 'VENDIDO'?<Product key ={product._id} product={product}/>:'')}
       </div>
       <FooterBanner footerBanner={bannerData && bannerData[0]} />
     </>
