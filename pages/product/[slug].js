@@ -6,7 +6,7 @@ import { Product } from '../../components';
 import { useStateContext } from '../../context/StateContext';
 
 const ProductDetails = ({ product, products }) => {
-  const { image, name, details, price, status } = product;
+  const { image, name, details, price, status, _id } = product;
   const [index, setIndex] = useState(0);
   const { decQty, incQty, qty, onAdd, setShowCart } = useStateContext();
 
@@ -17,6 +17,32 @@ const ProductDetails = ({ product, products }) => {
 
     setShowCart(true);
   }
+
+  const mutations = [{
+    createOrReplace: {
+      _id: product._id,
+      _type: 'product',
+      status: 'TESTE'
+    }
+  }]
+
+
+  const teste = (mutations) => {
+    fetch(`https://3yun1dl7.api.sanity.io/v2022-09-10/data/mutate/production`, {
+  method: 'post',
+  headers: {
+    'Content-type': 'application/json',
+    Authorization: `Bearer development`
+  },
+  body: JSON.stringify({mutations})
+})
+  .then(response => response.json())
+  .then(result => console.log(result))
+  .catch(error => console.error(error))
+   
+  }
+
+
 
   return (
     <div>
@@ -69,7 +95,7 @@ const ProductDetails = ({ product, products }) => {
           </div> : 
           <div className="buttons">
             {/* <button type="button" className="add-to-cart" onClick={() => onAdd(product, qty)}>Add to Cart</button> */}
-            <button type="button" className="buy-now">PRODUTO INDISPONÍVEL</button>
+            <button type="button" className="buy-now" onClick={() => teste(mutations)}>PRODUTO INDISPONÍVEL</button>
           </div> 
           }
         </div>
