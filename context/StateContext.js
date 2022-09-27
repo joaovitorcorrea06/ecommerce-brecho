@@ -16,25 +16,27 @@ export const StateContext = ({ children }) => {
   const onAdd = (product, quantity) => {
     const checkProductInCart = cartItems.find((item) => item._id === product._id);
     
-    setTotalPrice((prevTotalPrice) => prevTotalPrice + product.price * quantity);
-    setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + quantity);
-    
-    if(checkProductInCart) {
-      const updatedCartItems = cartItems.map((cartProduct) => {
-        if(cartProduct._id === product._id) return {
-          ...cartProduct,
-          quantity: cartProduct.quantity + quantity
-        }
-      })
-
-      setCartItems(updatedCartItems);
-    } else {
-      product.quantity = quantity;
+    if (checkProductInCart?.quantity !== 1){ 
+      setTotalPrice((prevTotalPrice) => prevTotalPrice + product.price * quantity);
+      setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + quantity);
       
-      setCartItems([...cartItems, { ...product }]);
+      if(checkProductInCart) {
+        const updatedCartItems = cartItems.map((cartProduct) => {
+          if(cartProduct._id === product._id) return {
+            ...cartProduct,
+            quantity: cartProduct.quantity + quantity
+          }
+        })
+        
+        setCartItems(updatedCartItems);
+      } else {
+        product.quantity = quantity;
+        
+        setCartItems([...cartItems, { ...product }]);
+      }
+      
+      toast.success(`1 ${product.name} added to the cart.`);
     }
-
-    toast.success(`${qty} ${product.name} added to the cart.`);
   } 
 
   const onRemove = (product) => {
