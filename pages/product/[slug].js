@@ -22,17 +22,21 @@ const ProductDetails = ({ product, products }) => {
     createOrReplace: {
       _id: product._id,
       _type: 'product',
-      status: 'TESTE'
+      status: 'TESTE',
+      details: product.details,
+      image: product.image,
+      name: product.name,
+      slug: product.slug
     }
   }]
 
 
   const teste = (mutations) => {
     fetch(`https://3yun1dl7.api.sanity.io/v2022-09-10/data/mutate/production`, {
-  method: 'post',
-  headers: {
+    method: 'post',
+    headers: {
     'Content-type': 'application/json',
-    Authorization: `Bearer development`
+    Authorization: `Bearer skVkmzVFSsgsXMpkfQWdXweJSm0mzN4hE0M5giHyy4BEmzSG8uaYHB6E2NeDYmoa9vs5mRSdSkRFrunMfZV5ywhIZezgPhVfgVbw44LZvZH1ypSV0OuOMnbfVlVzY6x5p7fonb6td6psb5yH1yXWqWaN0S9HlhBwyJbaCpbMo6S43deqbhzJ`
   },
   body: JSON.stringify({mutations})
 })
