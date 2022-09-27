@@ -27,7 +27,8 @@ const ProductDetails = ({ product, products }) => {
       details: product.details,
       image: product.image,
       name: product.name,
-      slug: product.slug
+      slug: product.slug,
+      price: product.price
     }
   }]
 
@@ -105,7 +106,7 @@ const ProductDetails = ({ product, products }) => {
           }
         </div>
       </div>
-
+      {/* <button type="button" className="buy-now" onClick={() => teste(mutations)}>PRODUTO INDISPONÍVEL</button> */}
       <div className="maylike-products-wrapper">
           <h2>You may also like</h2>
           <div className="marquee">

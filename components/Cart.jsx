@@ -12,7 +12,16 @@ const Cart = () => {
   const cartRef = useRef();
   const { totalPrice, totalQuantities, cartItems, setShowCart, toggleCartItemQuanitity, onRemove } = useStateContext();
 
+  const itemsInCart = []
+  let itemsToDelete = []
+
   const handleCheckout = async () => {
+
+    cartItems.map((cartItem) =>{
+      itemsInCart.push(cartItem) 
+    })
+    localStorage.setItem('product',JSON.stringify(itemsInCart))
+
     const stripe = await getStripe();
 
     const response = await fetch('/api/stripe', {
@@ -100,6 +109,14 @@ const Cart = () => {
             <div className="btn-container">
               <button type="button" className="btn" onClick={handleCheckout}>
                 Pay with Stripe
+              </button>
+              <button onClick={() => {
+                var storedItems = JSON.parse(localStorage.getItem('product'))
+                storedItems.map((value) => {
+                  console.log(value)
+                })
+              }}>
+                teste2
               </button>
             </div>
           </div>
