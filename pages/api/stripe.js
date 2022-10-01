@@ -1,46 +1,49 @@
-import Stripe from 'stripe';
+import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
-    console.log(req.body.cartItems)
+  console.log(req.body.cartItems);
 
-  if (req.method === 'POST') {
+  if (req.method === "POST") {
     try {
       const params = {
-        submit_type: 'pay',
-        mode: 'payment',
-        payment_method_types: ['card'],
+        submit_type: "pay",
+        mode: "payment",
+        payment_method_types: ["card", "ticket"],
         // billing_address_collection: 'required',
         shipping_address_collection: {
-            allowed_countries: ['BR'],
-          },
-        shipping_options: [
-          { shipping_rate: 'shr_1Lgr8BJWaZYNgDCYOLMK356I' },
-        ],
+          allowed_countries: ["BR"],
+        },
+        shipping_options: [{ shipping_rate: "shr_1Lgr8BJWaZYNgDCYOLMK356I" }],
         line_items: req.body.map((item) => {
           const img = item.image[0].asset._ref;
-          const newImage = img.replace('image-', 'https://cdn.sanity.io/images/3yun1dl7/production/').replace('-webp', '.webp');
+          const newImage = img
+            .replace(
+              "image-",
+              "https://cdn.sanity.io/images/3yun1dl7/production/"
+            )
+            .replace("-webp", ".webp");
 
           return {
-            price_data: { 
-              currency: 'brl',
-              product_data: { 
+            price_data: {
+              currency: "brl",
+              product_data: {
                 name: item.name,
                 images: [newImage],
               },
               unit_amount: item.price * 100,
             },
             //adjustable_quantity: {
-              // enabled:true,
-              //minimum: 1,
+            // enabled:true,
+            //minimum: 1,
             //},
-            quantity: item.quantity
-          }
+            quantity: item.quantity,
+          };
         }),
         success_url: `${req.headers.origin}/success`,
         cancel_url: `${req.headers.origin}/canceled`,
-      }
+      };
 
       const session = await stripe.checkout.sessions.create(params);
 
@@ -49,7 +52,7 @@ export default async function handler(req, res) {
       res.status(err.statusCode || 500).json(err.message);
     }
   } else {
-    res.setHeader('Allow', 'POST');
-    res.status(405).end('Method Not Allowed');
+    res.setHeader("Allow", "POST");
+    res.status(405).end("Method Not Allowed");
   }
 }

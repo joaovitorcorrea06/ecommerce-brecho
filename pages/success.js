@@ -53,7 +53,9 @@ const Success = () => {
       teste(mutations);
     });
 
-    localStorage.clear();
+    setTimeout(() => {
+      localStorage.clear();
+    }, 1000);
   }, []);
 
   return (
