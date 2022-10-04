@@ -123,9 +123,12 @@ const Cart = () => {
               <h3>${totalPrice}</h3>
             </div>
             <div className="btn-container">
-              <button type="button" className="btn" onClick={handleCheckout}>
-                Fazer checkkout!
-              </button>
+              {/* <button type="button" className="btn" onClick={handleCheckout}> */}
+              <Link href="/calcFrete">
+                <button type="button" className="btn">
+                  Fazer checkkout!
+                </button>
+              </Link>
               {/* <button onClick={() => {
                 var storedItems = JSON.parse(localStorage.getItem('product'))
                 storedItems.map((value) => {
