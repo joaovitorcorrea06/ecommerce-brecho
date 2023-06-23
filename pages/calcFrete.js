@@ -115,7 +115,7 @@ const Home = ({ products, bannerData, data }) => {
                 <td>SEDEX</td>
                 <td>{dadosFrete.valorsedex}</td>
                 <td>{dadosFrete.prazosedex} dias</td>
-                <td class="custom-button-container"><button class="custom-button">Quero esse!</button></td>
+                <td class="custom-button-container"><button class="custom-button" onClick={()=>handleCheckout(dadosFrete.valorsedex)}>Quero esse!</button></td>
               </tr>
             </table>
           </div>

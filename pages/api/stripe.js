@@ -10,7 +10,7 @@ export default async function handler(req, res) {
       const params = {
         submit_type: "pay",
         mode: "payment",
-        payment_method_types: ["card"],
+        payment_method_types: ["card", "boleto"],
         // billing_address_collection: 'required',
         shipping_address_collection: {
           allowed_countries: ["BR"],
@@ -47,8 +47,8 @@ export default async function handler(req, res) {
           shipping_rate_data: {
             type: 'fixed_amount',
             fixed_amount: {
-              // amount: Number(req.body.shippingCost.replace(',', '')),
-              amount: 499,
+              amount: Number(req.body.shippingCost.replace(',', '')),
+              // amount: 499,
               currency: 'brl',
             },
             display_name: 'Frete',
