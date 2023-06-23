@@ -149,7 +149,7 @@ const Cart = () => {
             <div className="btn-container">
               {/* <button type="button" className="btn" onClick={handleCheckout}></button> */}
               <Link href="/calcFrete">
-                <button type="button" className="btn">
+                <button type="button" className="btn" onClick={()=>setShowCart(false)}>
                   Fazer checkout!
                 </button>
               </Link>
