@@ -3,8 +3,23 @@ import React, { useState } from "react";
 import { client } from "../lib/client";
 import { calcularPrecoPrazo } from "correios-brasil";
 import axios from 'axios';
+import { useStateContext } from '../context/StateContext';
+import getStripe from '../lib/getStripe';
+import { toast } from 'react-hot-toast';
 
 const Home = ({ products, bannerData, data }) => {
+
+  const {
+    totalPrice,
+    totalQuantities,
+    cartItems,
+    setShowCart,
+    toggleCartItemQuanitity,
+    onRemove,
+  } = useStateContext();
+
+  const itemsInCart = [];
+  let itemsToDelete = [];
 
   const [dadosFrete, setDadosFrete] = useState(null)
   const [cepDestino, setCepDestino] = useState(null)
@@ -37,7 +52,36 @@ const Home = ({ products, bannerData, data }) => {
     }
   };
 
-  // const cep = 01153000
+  const handleCheckout = async (valor) => {
+    cartItems.map((cartItem) => {
+      itemsInCart.push(cartItem);
+    });
+    localStorage.setItem("product", JSON.stringify(itemsInCart));
+  
+    const stripe = await getStripe();
+  
+    const requestPayload = {
+      cartItems: cartItems,
+      shippingCost: valor, // Valor do frete
+    };
+  
+    const response = await fetch("/api/stripe", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestPayload),
+    });
+  
+    if (response.statusCode === 500) return;
+  
+    const data = await response.json();
+  
+    toast.loading("Redirecting...");
+  
+    stripe.redirectToCheckout({ sessionId: data.id });
+  };
+  
 
 
   return (
@@ -65,13 +109,13 @@ const Home = ({ products, bannerData, data }) => {
                 <td>PAC</td>
                 <td>{dadosFrete.valorpac}</td>
                 <td>{dadosFrete.prazopac} dias</td>
-                <td class="custom-button-container"><button class="custom-button">Ver Detalhes</button></td>
+                <td class="custom-button-container"><button class="custom-button" onClick={()=>handleCheckout(dadosFrete.valorpac)}>Quero esse!</button></td>
               </tr>
               <tr>
                 <td>SEDEX</td>
                 <td>{dadosFrete.valorsedex}</td>
                 <td>{dadosFrete.prazosedex} dias</td>
-                <td class="custom-button-container"><button class="custom-button">Ver Detalhes</button></td>
+                <td class="custom-button-container"><button class="custom-button">Quero esse!</button></td>
               </tr>
             </table>
           </div>

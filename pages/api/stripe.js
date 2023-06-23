@@ -3,7 +3,7 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
-  console.log(req.body.cartItems);
+  console.log(req.body);
 
   if (req.method === "POST") {
     try {
@@ -15,8 +15,8 @@ export default async function handler(req, res) {
         shipping_address_collection: {
           allowed_countries: ["BR"],
         },
-        shipping_options: [{ shipping_rate: "shr_1Lgr8BJWaZYNgDCYOLMK356I" }],
-        line_items: req.body.map((item) => {
+        // shipping_options: [{ shipping_rate: "shr_1Lgr8BJWaZYNgDCYOLMK356I" }],
+        line_items: req.body.cartItems.map((item) => {
           const img = item.image[0].asset._ref;
           const newImage = img
             .replace(
@@ -43,7 +43,31 @@ export default async function handler(req, res) {
         }),
         success_url: `${req.headers.origin}/success`,
         cancel_url: `${req.headers.origin}/canceled`,
+        shipping_options : [{
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: Number(req.body.shippingCost.replace(',', '')),
+              // amount: 10,
+              currency: 'brl',
+            },
+            display_name: 'Frete',
+            // delivery_estimate: {
+            //   minimum: {
+            //     unit: 'business_day',
+            //     value: 5,
+            //   },
+            //   maximum: {
+            //     unit: 'business_day',
+            //     value: 7,
+            //   },
+            // },
+          },
+        }]
       };
+
+
+      // params.shipping_options = [shippingOption];
 
       const session = await stripe.checkout.sessions.create(params);
 

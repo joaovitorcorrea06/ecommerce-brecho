@@ -27,6 +27,30 @@ const Cart = () => {
   const itemsInCart = [];
   let itemsToDelete = [];
 
+  // const handleCheckout = async () => {
+  //   cartItems.map((cartItem) => {
+  //     itemsInCart.push(cartItem);
+  //   });
+  //   localStorage.setItem("product", JSON.stringify(itemsInCart));
+
+  //   const stripe = await getStripe();
+
+  //   const response = await fetch("/api/stripe", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(cartItems),
+  //   });
+
+  //   if (response.statusCode === 500) return;
+
+  //   const data = await response.json();
+
+  //   toast.loading("Redirecting...");
+
+  //   stripe.redirectToCheckout({ sessionId: data.id });
+  // };
   const handleCheckout = async () => {
     cartItems.map((cartItem) => {
       itemsInCart.push(cartItem);
@@ -126,7 +150,7 @@ const Cart = () => {
               {/* <button type="button" className="btn" onClick={handleCheckout}></button> */}
               <Link href="/calcFrete">
                 <button type="button" className="btn">
-                  Fazer checkkout!
+                  Fazer checkout!
                 </button>
               </Link>
               {/* <button onClick={() => {
